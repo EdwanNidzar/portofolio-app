@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use App\Http\Requests\Projects\StoreRequest;
+use App\Http\Requests\Projects\UpdateRequest;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -63,15 +65,37 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        $project = Project::findOrFail($project->id);
+        return view('projects.edit', compact('project'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateRequest $request, Project $project)
     {
-        //
+        $project = Project::findOrFail($project->id);
+
+        $validated = $request->validated();
+
+        $project->update($validated);
+       
+
+        if ($request->hasFile('image')) {
+            // delete image
+            Storage::disk('public')->delete($project->image);
+            
+            $filePath = $request->file('image')->store('projects/images', 'public');
+            $validated['image'] = $filePath;
+        }
+
+        if ($project) {
+            session()->flash('success', 'Project updated successfully');
+            return redirect()->route('projects.index');
+        } else {
+            session()->flash('error', 'Failed to update project');
+            return back()->withInput()->route('projects.index');
+        }
     }
 
     /**

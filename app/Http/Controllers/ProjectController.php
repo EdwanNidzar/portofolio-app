@@ -103,6 +103,17 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project = Project::findOrFail($project->id);
+
+        // delete image
+        Storage::disk('public')->delete($project->image);
+
+        if ($project->delete()) {
+            session()->flash('success', 'Project deleted successfully');
+            return redirect()->route('projects.index');
+        } else {
+            session()->flash('error', 'Failed to delete project');
+            return back()->withInput()->route('projects.index');
+        }
     }
 }

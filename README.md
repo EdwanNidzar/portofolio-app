@@ -12,7 +12,7 @@ Membuat CMS dengan laravel untuk portofolio
 
 Before you begin, ensure you have the following installed:
 
-- [composer](https://github.com/EdwanNidzar)
+- [composer](https://getcomposer.org/download/)
 - [PHP](https://www.php.net/downloads) (version 8.1 or higher)
 - [Node.js](https://nodejs.org/en/download/package-manager)
 ## Installation

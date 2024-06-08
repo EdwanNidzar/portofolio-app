@@ -116,4 +116,10 @@ class ProjectController extends Controller
             return back()->withInput()->route('projects.index');
         }
     }
+
+    public function porto(){
+        return view('welcome', [
+            'projects' => Project::latest()->paginate(3),
+        ]);
+    }
 }

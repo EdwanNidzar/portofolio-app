@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use Illuminate\Http\Request;
+use App\Http\Requests\Projects\StoreRequest;
 
 class ProjectController extends Controller
 {
@@ -22,15 +23,30 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('projects.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        if ($request->hasFile('image')) {
+            $filePath = $request->file('image')->store('projects/images', 'public');
+            $validated['image'] = $filePath;
+        }
+
+        $project = Project::create($validated);
+
+        if ($project) {
+            session()->flash('success', 'Project created successfully');
+            return redirect()->route('projects.index');
+        } else {
+            session()->flash('error', 'Failed to create project');
+            return back()->withInput();
+        }
     }
 
     /**

@@ -53,7 +53,7 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                           <div class="flex items-center">
                             <div class="flex-shrink-0 h-10 w-10">
-                              <img class="h-10 w-10 rounded-full" src="{{ $project->image }}"
+                              <img class="h-10 w-10 rounded-full" src="{{ Storage::url($project->image) }}"
                                 alt="{{ $project->name_project }}">
                             </div>
                             <div class="ml-4">
